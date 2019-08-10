@@ -80,3 +80,6 @@ private:
 
 #define SHWND_EXCEPT(hr) ShadowWindow::Exception(__LINE__,__FILE__, hr)
 #define SHWND_LAST_EXCEPT(hr) ShadowWindow::Exception(__LINE__,__FILE__, GetLastError())
+
+
+//test commit

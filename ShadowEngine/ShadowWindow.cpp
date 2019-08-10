@@ -106,7 +106,7 @@ std::optional<int> ShadowWindow::ProcessMessages()
 	return {};
 }
 
-DX12 & ShadowWindow::Gfx()
+DX12& ShadowWindow::Gfx()
 {
 	return *pGraphics;
 }
