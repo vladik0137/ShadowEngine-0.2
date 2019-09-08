@@ -309,6 +309,19 @@ void DX12::FlushCommandQueue()
 	}
 }
 
+ID3D12Resource* DX12::CurrentBackBuffer()const
+{
+	return mSwapChainBuffer[mCurrBackBuffer].Get();
+}
+
+D3D12_CPU_DESCRIPTOR_HANDLE DX12::CurrentBackBufferView()const
+{
+	return CD3DX12_CPU_DESCRIPTOR_HANDLE(
+		mRtvHeap->GetCPUDescriptorHandleForHeapStart(),
+		mCurrBackBuffer,
+		mRtvDescriptorSize);
+}
+
 D3D12_CPU_DESCRIPTOR_HANDLE DX12::DepthStencilView()const
 {
 	return mDsvHeap->GetCPUDescriptorHandleForHeapStart();
