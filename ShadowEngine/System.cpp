@@ -6,7 +6,7 @@
 
 System::System()
 	:
-	wnd(800,600,L"Fuck Box!")
+	wnd(800,600,L"Fuck Box!")	
 {}
 
 System::~System()
@@ -15,13 +15,31 @@ System::~System()
 
 int System::Run()
 {
-	while (true)
-	{
-		StartFrame();
-	}
-}
+	MSG msg = { 0 };
 
-void System::StartFrame()
-{
-	wnd.ProcessMessages();
+	timer.Reset();
+
+	//while queue has messages, remove and dispatch them (but do not block exe.)
+	while (msg.message != WM_QUIT)
+	{
+		if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
+		{
+			TranslateMessage(&msg);
+			DispatchMessage(&msg);
+		}
+		else
+		{
+			timer.Tick();
+
+			if (wnd.isPaused() != false)
+			{
+				wnd.pGraphics->EndFrame();
+			}
+			else
+			{
+				Sleep(100);
+			}
+		}
+	}
+	return (int)msg.wParam;
 }

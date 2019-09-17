@@ -10,8 +10,6 @@ public:
 	~System();
 	int Run();
 private:
-	void StartFrame();
-private:
 	ShadowWindow wnd;
 	GameTimer timer;
 };

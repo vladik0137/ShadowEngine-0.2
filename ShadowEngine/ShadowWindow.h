@@ -73,6 +73,7 @@ public:
 	GameTimer mTimer;
 	HWND hWnd;
 	std::unique_ptr<DX12> pGraphics;
+	bool isPaused();
 private:
 	int width;
 	int height;

@@ -271,6 +271,11 @@ LRESULT ShadowWindow::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPara
 	return DefWindowProc(hWnd, msg, wParam, lParam);
 }
 
+bool ShadowWindow::isPaused()
+{
+	return mAppPaused;
+}
+
 ShadowWindow::Exception::Exception(int line, const char* file, HRESULT hr) noexcept
 	:
 	ShadowException(line,file),
