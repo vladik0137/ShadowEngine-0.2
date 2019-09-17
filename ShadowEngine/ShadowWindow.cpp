@@ -89,37 +89,6 @@ void ShadowWindow::SetTitle(const std::wstring& title)
 	}
 }
 
-int ShadowWindow::ProcessMessages()
-{
-	MSG msg = { 0 };
-
-	mTimer.Reset();
-
-	//while queue has messages, remove and dispatch them (but do not block exe.)
-	while (msg.message != WM_QUIT)
-	{
-		if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
-		{
-			TranslateMessage(&msg);
-			DispatchMessage(&msg);
-		}
-		else
-		{
-			mTimer.Tick();
-			
-			if (!mAppPaused)
-			{
-				pGraphics->EndFrame();
-			}
-			else
-			{
-				Sleep(100);
-			}
-		}
-	}
-	return (int)msg.wParam;
-}
-
 DX12& ShadowWindow::Gfx()
 {
 	return *pGraphics;

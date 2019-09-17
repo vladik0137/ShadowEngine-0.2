@@ -2,7 +2,7 @@
 
 #include <sstream>
 
-int WINAPI WinMain(
+int CALLBACK WinMain(
 	HINSTANCE hInstance,
 	HINSTANCE hPrevInstance,
 	LPSTR     lpCmdLine,

@@ -107,6 +107,7 @@ bool DX12::InitDirect3D(HWND hWnd)
 	CreateCommandObjects();
 	CreateSwapChain(hWnd);
 	CreateRtvAndDsvDescriptorHeaps();
+	OnResize();
 
 	return true;
 }
@@ -241,7 +242,44 @@ void DX12::Update()
 
 void DX12::Draw()
 {
-	mSwapChain->Present(1u, 0u);
+	// Reuse the memory in the command list
+	ThrowIfFailed(mDirectCmdListAlloc->Reset());
+
+	// Reset the command list
+	ThrowIfFailed(mCommandList->Reset(mDirectCmdListAlloc.Get(), nullptr));
+
+	// Indicate state transition
+	mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(CurrentBackBuffer(),
+		D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET));
+
+	// Set Viewport and Scissor rect
+	mCommandList->RSSetViewports(1, &mScreenViewport);
+	mCommandList->RSSetScissorRects(1, &mScissorRect);
+
+	// Clear Back Buffer and Depth Buffer
+	mCommandList->ClearRenderTargetView(CurrentBackBufferView(), Colors::BlueViolet, 0, nullptr);
+	mCommandList->ClearDepthStencilView(DepthStencilView(), D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL, 1.0F, 0, 0, nullptr);
+
+	// Specify the buffer to render to
+	mCommandList->OMSetRenderTargets(1, &CurrentBackBufferView(), true, &DepthStencilView());
+
+	// Indicate state transition on the resource usage
+	mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(CurrentBackBuffer(),
+		D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT));
+
+	// Stop recording commands
+	ThrowIfFailed(mCommandList->Close());
+
+	// Add the command lost to the queue
+	ID3D12CommandList* cmdsLists[] = { mCommandList.Get() };
+	mCommandQueue->ExecuteCommandLists(_countof(cmdsLists), cmdsLists);
+
+	// Swap the front and back Buffers
+	ThrowIfFailed(mSwapChain->Present(0, 0));
+	mCurrBackBuffer = (mCurrBackBuffer + 1) % SwapChainBufferCount;
+
+	// flush the command queue
+	FlushCommandQueue();
 }
 
 void DX12::CreateCommandObjects()

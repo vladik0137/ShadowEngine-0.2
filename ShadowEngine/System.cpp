@@ -31,7 +31,7 @@ int System::Run()
 		{
 			timer.Tick();
 
-			if (wnd.isPaused() != false)
+			if (wnd.isPaused() == false)
 			{
 				wnd.pGraphics->EndFrame();
 			}

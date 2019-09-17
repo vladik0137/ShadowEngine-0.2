@@ -61,7 +61,7 @@ public:
 	ShadowWindow(const ShadowWindow&) = delete;
 	ShadowWindow& operator=(const ShadowWindow&) = delete;
 	void SetTitle(const std::wstring& title);
-	int ProcessMessages();
+	//int ProcessMessages();
 	DX12& Gfx();
 private:
 	static LRESULT CALLBACK HandleMsgSetup(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexcept;
