@@ -1,5 +1,6 @@
 #include "ShadowWindow.h"
 
+
 #include <sstream>
 #include <memory>
 
@@ -88,22 +89,35 @@ void ShadowWindow::SetTitle(const std::wstring& title)
 	}
 }
 
-std::optional<int> ShadowWindow::ProcessMessages()
+int ShadowWindow::ProcessMessages()
 {
-	MSG msg;
+	MSG msg = { 0 };
+
+	mTimer.Reset();
+
 	//while queue has messages, remove and dispatch them (but do not block exe.)
-	while (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
+	while (msg.message != WM_QUIT)
 	{
-		if (msg.message == WM_QUIT)
+		if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
 		{
-			return (int)msg.wParam;
+			TranslateMessage(&msg);
+			DispatchMessage(&msg);
 		}
-
-		TranslateMessage(&msg);
-		DispatchMessage(&msg);
+		else
+		{
+			mTimer.Tick();
+			
+			if (!mAppPaused)
+			{
+				pGraphics->EndFrame();
+			}
+			else
+			{
+				Sleep(100);
+			}
+		}
 	}
-
-	return {};
+	return (int)msg.wParam;
 }
 
 DX12& ShadowWindow::Gfx()
@@ -141,7 +155,19 @@ LRESULT ShadowWindow::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPara
 {
 	switch (msg)
 	{
-	case WM_CLOSE:
+	case WM_ACTIVATE:
+		if (LOWORD(wParam) == WA_INACTIVE)
+		{
+			mAppPaused = true;
+			mTimer.Stop();
+		}
+		else
+		{
+			mAppPaused = false;
+			mTimer.Start();
+		}
+		return 0;
+	case WM_DESTROY:
 		PostQuitMessage(0);
 		return 0;
 	// clear keystate when window loses focus

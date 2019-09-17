@@ -2,7 +2,7 @@
 
 #include <sstream>
 
-int CALLBACK WinMain(
+int WINAPI WinMain(
 	HINSTANCE hInstance,
 	HINSTANCE hPrevInstance,
 	LPSTR     lpCmdLine,
@@ -11,6 +11,7 @@ int CALLBACK WinMain(
 	
 	try
 	{
+		
 		return System{}.Run();
 	}
 

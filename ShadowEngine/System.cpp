@@ -15,20 +15,13 @@ System::~System()
 
 int System::Run()
 {
-
 	while (true)
 	{
-
-		if (const auto ecode = ShadowWindow::ProcessMessages())
-		{
-			return *ecode;
-		}
-
 		StartFrame();
 	}
 }
 
 void System::StartFrame()
 {
-	wnd.Gfx().EndFrame();
+	wnd.ProcessMessages();
 }

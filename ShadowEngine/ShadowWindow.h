@@ -61,7 +61,7 @@ public:
 	ShadowWindow(const ShadowWindow&) = delete;
 	ShadowWindow& operator=(const ShadowWindow&) = delete;
 	void SetTitle(const std::wstring& title);
-	static std::optional<int> ProcessMessages();
+	int ProcessMessages();
 	DX12& Gfx();
 private:
 	static LRESULT CALLBACK HandleMsgSetup(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexcept;
@@ -70,12 +70,17 @@ private:
 public:
 	Keyboard kbd;
 	Mouse mouse;
+	GameTimer mTimer;
+	HWND hWnd;
+	std::unique_ptr<DX12> pGraphics;
 private:
 	int width;
 	int height;
+
+	bool mAppPaused = false;
 	//HINSTANCE mhAppInst = nullptr;
-	HWND hWnd;
-	std::unique_ptr<DX12> pGraphics;
+	
+
 };
 
 #define SHWND_EXCEPT(hr) ShadowWindow::Exception(__LINE__,__FILE__, hr)

@@ -31,6 +31,7 @@ public:
 
 	bool Get4xMsaaState()const;
 	void Set4xMsaaState(bool value, HWND hwnd);
+	GameTimer mTimer;
 private:
 	void CreateRtvAndDsvDescriptorHeaps();
 	void OnResize();
@@ -56,7 +57,7 @@ private:
 	bool m4xMsaaState = false;
 	UINT m4xMsaaQuality = 0;
 
-	GameTimer mTimer;
+	
 
 	Microsoft::WRL::ComPtr<IDXGIFactory4> mdxgiFactory;
 	Microsoft::WRL::ComPtr<IDXGISwapChain> mSwapChain;
