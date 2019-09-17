@@ -257,7 +257,7 @@ void DX12::Draw()
 	mCommandList->RSSetScissorRects(1, &mScissorRect);
 
 	// Clear Back Buffer and Depth Buffer
-	mCommandList->ClearRenderTargetView(CurrentBackBufferView(), Colors::SteelBlue, 0, nullptr);
+	mCommandList->ClearRenderTargetView(CurrentBackBufferView(), Colors::BlueViolet, 0, nullptr);
 	mCommandList->ClearDepthStencilView(DepthStencilView(), D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL, 1.0F, 0, 0, nullptr);
 
 	// Specify the buffer to render to
