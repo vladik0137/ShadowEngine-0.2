@@ -137,6 +137,7 @@
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Mouse.cpp" />
     <ClCompile Include="ShadowException.cpp" />
+    <ClCompile Include="ShadowMath.cpp" />
     <ClCompile Include="ShadowWindow.cpp" />
     <ClCompile Include="System.cpp" />
   </ItemGroup>
@@ -147,9 +148,11 @@
     <ClInclude Include="Keyboard.h" />
     <ClInclude Include="Mouse.h" />
     <ClInclude Include="ShadowException.h" />
+    <ClInclude Include="ShadowMath.h" />
     <ClInclude Include="ShadowWin.h" />
     <ClInclude Include="ShadowWindow.h" />
     <ClInclude Include="System.h" />
+    <ClInclude Include="UploadBuffer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

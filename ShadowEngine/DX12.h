@@ -13,7 +13,19 @@
 
 #include "DX12Util.h"
 #include "GameTimer.h"
+#include "ShadowMath.h"
+#include "UploadBuffer.h"
 
+struct Vertex
+{
+	DirectX::XMFLOAT3 Pos;
+	DirectX::XMFLOAT4 Color;
+};
+
+struct ObjectConstants
+{
+	DirectX::XMFLOAT4X4 WorldViewProj = ShadowMath::Identity4x4();
+};
 
 class DX12
 {
@@ -34,6 +46,9 @@ public:
 	GameTimer mTimer;
 private:
 	void CreateRtvAndDsvDescriptorHeaps();
+	void BuildDescriptorHeaps();
+	void BuildConstantBuffers();
+
 	void OnResize();
 	void Update();
 	void Draw();
@@ -77,6 +92,11 @@ private:
 
 	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> mRtvHeap;
 	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> mDsvHeap;
+	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> mCbvHeap = nullptr;
+
+	std::unique_ptr<UploadBuffer<ObjectConstants>> mObjectCB = nullptr;
+
+	std::unique_ptr<MeshGeometry> mBoxGeo = nullptr;
 
 	D3D12_VIEWPORT mScreenViewport;
 	D3D12_RECT mScissorRect;
