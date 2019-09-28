@@ -1,7 +1,8 @@
 #include <Windows.h>
 #include "GameTimer.h"
+#include <assert.h>
 
-using namespace std::chrono;
+//using namespace std::chrono;
 
 GameTimer::GameTimer()
 	:
@@ -15,6 +16,8 @@ GameTimer::GameTimer()
 
 float GameTimer::TotalTime()const
 {
+
+	
 	/* Again we are using the same method as before with keeping time
 	its all just a glorified stop watch only we are using windows
 	instead of using chrono so its a bit different */

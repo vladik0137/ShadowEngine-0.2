@@ -33,6 +33,7 @@ int System::Run()
 
 			if (wnd.isPaused() == false)
 			{
+				wnd.CalculateFrameStats();
 				wnd.pGraphics->EndFrame();
 			}
 			else

@@ -3,6 +3,7 @@
 
 #include <sstream>
 #include <memory>
+#include <assert.h>
 
 ShadowWindow::WindowClass ShadowWindow::WindowClass::wndClass;
 
@@ -136,9 +137,23 @@ LRESULT ShadowWindow::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPara
 			mTimer.Start();
 		}
 		return 0;
+	//case WM_SIZE:
+	case WM_ENTERSIZEMOVE:
+		mAppPaused = true;
+		mResizing = true;
+		mTimer.Stop();
+		return 0;
+	case WM_EXITSIZEMOVE:
+		mAppPaused = false;
+		mResizing = false;
+		mTimer.Start();
+		pGraphics->OnResize();
+		return 0;
 	case WM_DESTROY:
 		PostQuitMessage(0);
 		return 0;
+	case WM_MENUCHAR:
+		return MAKELRESULT(0, MNC_CLOSE);
 	// clear keystate when window loses focus
 	case WM_KILLFOCUS:
 		kbd.ClearState();
@@ -287,6 +302,34 @@ std::string ShadowWindow::Exception::TranslateErrorCode(HRESULT hr) noexcept
 	// free windows buffer
 	LocalFree(pMsgBuf);
 	return errorString;
+}
+
+void ShadowWindow::CalculateFrameStats()
+{
+	static int frameCount = 0;
+	static float timeElapsed = 0.0f;
+
+	frameCount++;
+
+	assert(mTimer.TotalTime() >= 0.0f);
+
+	if ((mTimer.TotalTime() - timeElapsed) >= 1.0f)
+	{
+		float fps = (float)frameCount;
+		float mspf = 1000.f / fps;
+
+		std::wstring fpsStr = std::to_wstring(fps);
+		std::wstring mspfStr = std::to_wstring(mspf);
+
+		std::wstring windowText =
+			L"   fps: " + fpsStr +
+			L"  mspf: " + mspfStr;
+
+		SetWindowText(hWnd, windowText.c_str());
+
+		frameCount = 0;
+		timeElapsed += 1.0f;
+	}
 }
 
 HRESULT ShadowWindow::Exception::GetErrorCode() const noexcept

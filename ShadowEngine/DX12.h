@@ -37,6 +37,7 @@ public:
 public:
 	//bool Initialize();
 	bool InitDirect3D(HWND hWnd);
+	void OnResize();
 	void EndFrame();
 public:
 	float AspectRatio()const;
@@ -49,7 +50,6 @@ private:
 	void BuildDescriptorHeaps();
 	void BuildConstantBuffers();
 
-	void OnResize();
 	void Update();
 	void Draw();
 
@@ -61,8 +61,6 @@ private:
 	ID3D12Resource* CurrentBackBuffer()const;
 	D3D12_CPU_DESCRIPTOR_HANDLE CurrentBackBufferView()const;
 	D3D12_CPU_DESCRIPTOR_HANDLE DepthStencilView()const;
-
-	void CalculateFrameStats();
 
 	void LogAdapters();
 	void LogAdapterOutputs(IDXGIAdapter* adapter);

@@ -381,16 +381,6 @@ D3D12_CPU_DESCRIPTOR_HANDLE DX12::DepthStencilView()const
 	return mDsvHeap->GetCPUDescriptorHandleForHeapStart();
 }
 
-void DX12::CalculateFrameStats()
-{
-	static int frameCount = 0;
-	static float timeElapsed = 0.0f;
-
-	frameCount++;
-
-
-}
-
 void DX12::LogAdapters()
 {
 	UINT i = 0;

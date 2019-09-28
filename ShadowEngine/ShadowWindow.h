@@ -61,6 +61,7 @@ public:
 	ShadowWindow(const ShadowWindow&) = delete;
 	ShadowWindow& operator=(const ShadowWindow&) = delete;
 	void SetTitle(const std::wstring& title);
+	void CalculateFrameStats();
 	//int ProcessMessages();
 	DX12& Gfx();
 private:
@@ -79,6 +80,10 @@ private:
 	int height;
 
 	bool mAppPaused = false;
+	bool mMinimized = false;
+	bool mMaximized = false;
+	bool mResizing = false;
+	bool mFullscreenState = false;
 	//HINSTANCE mhAppInst = nullptr;
 	
 
