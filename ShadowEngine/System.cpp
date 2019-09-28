@@ -17,7 +17,7 @@ int System::Run()
 {
 	MSG msg = { 0 };
 
-	timer.Reset();
+	wnd.mTimer.Reset();
 
 	//while queue has messages, remove and dispatch them (but do not block exe.)
 	while (msg.message != WM_QUIT)
@@ -29,7 +29,7 @@ int System::Run()
 		}
 		else
 		{
-			timer.Tick();
+			wnd.mTimer.Tick();
 
 			if (wnd.isPaused() == false)
 			{
