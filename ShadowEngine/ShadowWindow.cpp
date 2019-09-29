@@ -47,8 +47,8 @@ HINSTANCE ShadowWindow::WindowClass::GetInstance() noexcept
 
 ShadowWindow::ShadowWindow(int width, int height, const wchar_t* name)
 	:
-	width(width),
-	height(height)
+	mwidth(width),
+	mheight(height)
 {
 	// calculate window size based on desired client region size
 	RECT wr;
@@ -75,6 +75,8 @@ ShadowWindow::ShadowWindow(int width, int height, const wchar_t* name)
 	ShowWindow(hWnd, SW_SHOWDEFAULT);
 	// create graphics object
 	pGraphics = std::make_unique<DX12>(hWnd);
+	SetWidth();
+	SetHeight();
 }
 
 ShadowWindow::~ShadowWindow()
@@ -137,7 +139,6 @@ LRESULT ShadowWindow::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPara
 			mTimer.Start();
 		}
 		return 0;
-	//case WM_SIZE:
 	case WM_ENTERSIZEMOVE:
 		mAppPaused = true;
 		mResizing = true;
@@ -179,7 +180,7 @@ LRESULT ShadowWindow::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPara
 	case WM_MOUSEMOVE:
 	{
 		const POINTS pt = MAKEPOINTS(lParam);
-		if (pt.x >= 0 && pt.x < width && pt.y >= 0 && pt.y < height)
+		if (pt.x >= 0 && pt.x < mwidth && pt.y >= 0 && pt.y < mheight)
 		{
 			mouse.OnMouseMove(pt.x, pt.y);
 			if (!mouse.IsInWindow())
@@ -206,7 +207,7 @@ LRESULT ShadowWindow::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPara
 	{
 		const POINTS pt = MAKEPOINTS(lParam);
 		mouse.OnLeftPress(pt.x, pt.y);
-		if (pt.x < 0 || pt.x >= width || pt.y < 0 || pt.y >= height)
+		if (pt.x < 0 || pt.x >= mwidth || pt.y < 0 || pt.y >= mheight)
 		{
 			ReleaseCapture();
 			mouse.OnMouseLeave();
@@ -217,7 +218,7 @@ LRESULT ShadowWindow::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPara
 	{
 		const POINTS pt = MAKEPOINTS(lParam);
 		mouse.OnLeftRelease(pt.x, pt.y);
-		if (pt.x < 0 || pt.x >= width || pt.y < 0 || pt.y >= height)
+		if (pt.x < 0 || pt.x >= mwidth || pt.y < 0 || pt.y >= mheight)
 		{
 			ReleaseCapture();
 			mouse.OnMouseLeave();
@@ -253,6 +254,16 @@ LRESULT ShadowWindow::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPara
 	}
 
 	return DefWindowProc(hWnd, msg, wParam, lParam);
+}
+
+void ShadowWindow::SetWidth()
+{
+	mwidth = pGraphics->mClientWidth;
+}
+
+void ShadowWindow::SetHeight()
+{
+	mheight = pGraphics->mClientHeight;
 }
 
 bool ShadowWindow::isPaused()
@@ -310,8 +321,6 @@ void ShadowWindow::CalculateFrameStats()
 	static float timeElapsed = 0.0f;
 
 	frameCount++;
-
-	assert(mTimer.TotalTime() >= 0.0f);
 
 	if ((mTimer.TotalTime() - timeElapsed) >= 1.0f)
 	{

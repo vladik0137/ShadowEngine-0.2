@@ -50,7 +50,7 @@ public:
 
 	void CopyData(int elementIndex, const T& data)
 	{
-		memcpy(&mMappedData[elementIndex * melementByteSize], &data, sizeof(T));
+		memcpy(&mMappedData[elementIndex * mElementByteSize], &data, sizeof(T));
 	}
 
 private:

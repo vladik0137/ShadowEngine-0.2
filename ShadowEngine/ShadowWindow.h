@@ -68,6 +68,9 @@ private:
 	static LRESULT CALLBACK HandleMsgSetup(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexcept;
 	static LRESULT CALLBACK HandleMsgThunk(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexcept;
 	LRESULT HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexcept;
+
+	void SetWidth();
+	void SetHeight();
 public:
 	Keyboard kbd;
 	Mouse mouse;
@@ -75,9 +78,10 @@ public:
 	HWND hWnd;
 	std::unique_ptr<DX12> pGraphics;
 	bool isPaused();
+	int mwidth;
+	int mheight;
 private:
-	int width;
-	int height;
+
 
 	bool mAppPaused = false;
 	bool mMinimized = false;
@@ -86,7 +90,6 @@ private:
 	bool mFullscreenState = false;
 	//HINSTANCE mhAppInst = nullptr;
 	
-
 };
 
 #define SHWND_EXCEPT(hr) ShadowWindow::Exception(__LINE__,__FILE__, hr)

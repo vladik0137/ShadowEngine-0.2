@@ -37,6 +37,7 @@ public:
 public:
 	//bool Initialize();
 	bool InitDirect3D(HWND hWnd);
+
 	void OnResize();
 	void EndFrame();
 public:
@@ -44,11 +45,20 @@ public:
 
 	bool Get4xMsaaState()const;
 	void Set4xMsaaState(bool value, HWND hwnd);
+
+	int mClientWidth = 800;
+	int mClientHeight = 600;
+
 	GameTimer mTimer;
 private:
 	void CreateRtvAndDsvDescriptorHeaps();
+
 	void BuildDescriptorHeaps();
 	void BuildConstantBuffers();
+	void BuildRootSignature();
+	void BuildShadersAndInputLayout();
+	void BuildGeometry();
+	void BuildPSO();
 
 	void Update();
 	void Draw();
@@ -88,6 +98,8 @@ private:
 	Microsoft::WRL::ComPtr<ID3D12Resource> mSwapChainBuffer[SwapChainBufferCount];
 	Microsoft::WRL::ComPtr<ID3D12Resource> mDepthStencilBuffer;
 
+	Microsoft::WRL::ComPtr<ID3D12RootSignature> mRootSignature = nullptr;
+
 	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> mRtvHeap;
 	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> mDsvHeap;
 	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> mCbvHeap = nullptr;
@@ -95,6 +107,13 @@ private:
 	std::unique_ptr<UploadBuffer<ObjectConstants>> mObjectCB = nullptr;
 
 	std::unique_ptr<MeshGeometry> mBoxGeo = nullptr;
+
+	Microsoft::WRL::ComPtr<ID3DBlob>mvsByteCode = nullptr;
+	Microsoft::WRL::ComPtr<ID3DBlob>mpsByteCode = nullptr;
+
+	std::vector<D3D12_INPUT_ELEMENT_DESC> mInputLayout;
+
+	Microsoft::WRL::ComPtr<ID3D12PipelineState> mPSO = nullptr;
 
 	D3D12_VIEWPORT mScreenViewport;
 	D3D12_RECT mScissorRect;
@@ -106,7 +125,14 @@ private:
 	D3D_DRIVER_TYPE md3dDriverType = D3D_DRIVER_TYPE_HARDWARE;
 	DXGI_FORMAT mBackBufferFormat = DXGI_FORMAT_R8G8B8A8_UNORM;
 	DXGI_FORMAT mDepthStencilFormat = DXGI_FORMAT_D24_UNORM_S8_UINT;
-	int mClientWidth = 800;
-	int mClientHeight = 600;
+
+	DirectX::XMFLOAT4X4 mWorld = ShadowMath::Identity4x4();
+	DirectX::XMFLOAT4X4 mView  = ShadowMath::Identity4x4();
+	DirectX::XMFLOAT4X4 mProj  = ShadowMath::Identity4x4();
+
+	float mTheta = 1.5f * DirectX::XM_PI;
+	float mPhi = DirectX::XM_PIDIV4;
+	float mRadius = 5.0f;
+
 };
 

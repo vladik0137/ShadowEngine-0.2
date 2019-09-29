@@ -30,7 +30,12 @@ Microsoft::WRL::ComPtr<ID3DBlob> DX12Util::LoadBinary(const std::wstring& filena
 	return blob;
 }
 
-Microsoft::WRL::ComPtr<ID3D12Resource> DX12Util::CreateDefaultBuffer(ID3D12Device* device, ID3D12GraphicsCommandList* cmdList, const void* initData, UINT64 byteSize, Microsoft::WRL::ComPtr<ID3D12Resource>& uploadBuffer)
+Microsoft::WRL::ComPtr<ID3D12Resource> DX12Util::CreateDefaultBuffer(
+	ID3D12Device* device,
+	ID3D12GraphicsCommandList* cmdList,
+	const void* initData,
+	UINT64 byteSize,
+	Microsoft::WRL::ComPtr<ID3D12Resource>& uploadBuffer)
 {
 	ComPtr<ID3D12Resource> defaultBuffer;
 
