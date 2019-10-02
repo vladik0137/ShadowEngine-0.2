@@ -182,34 +182,32 @@ LRESULT ShadowWindow::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPara
 	{
 		const POINTS pt = MAKEPOINTS(lParam);
 		// check to see if we are in client region
-		if (mouse.LeftIsPressed() == true)
+		
+		float mX;
+		float mY;
+
+		if (mouse.LeftIsPressed() == true && pt.x >= 0 && pt.x < mwidth && pt.y >= 0 && pt.y < mheight)
 		{
-			if (pt.x >= 0 && pt.x < mwidth && pt.y >= 0 && pt.y < mheight)
+			//log enter and capture mouse movements
+			mouse.OnMouseMove(pt.x, pt.y);
+			mX = mouse.GetPosX();
+			mY = mouse.GetPosY();
+
+			float dx = DirectX::XMConvertToRadians(0.001F * static_cast<float>(mX - mouse.mLastMousePos.x));
+			float dy = DirectX::XMConvertToRadians(0.001F * static_cast<float>(mY - mouse.mLastMousePos.y));
+
+			pGraphics->mTheta += dx;
+			pGraphics->mPhi += dy;
+
+			pGraphics->mPhi = ShadowMath::Clamp(pGraphics->mPhi, 0.1f, ShadowMath::Pi - 0.1f);
+			
+			if (!mouse.IsInWindow())
 			{
-
-				int mX;
-				int mY;
-
-				//log enter and capture mouse movements
-				mouse.OnMouseMove(pt.x, pt.y);
-
-				mX = mouse.GetPosX();
-				mY = mouse.GetPosY();
-
-				float dx = DirectX::XMConvertToRadians(0.25F * static_cast<float>(mX - mouse.mLastMousePos.x));
-				float dy = DirectX::XMConvertToRadians(0.25F * static_cast<float>(mY - mouse.mLastMousePos.y));
-
-				pGraphics->mTheta += dx;
-				pGraphics->mPhi += dy;
-
-				pGraphics->mPhi = ShadowMath::Clamp(pGraphics->mPhi, 0.1f, ShadowMath::Pi - 0.1f);
-
-				if (!mouse.IsInWindow())
-				{
-					SetCapture(hWnd);
-					mouse.OnMouseEnter();
-				}
+				SetCapture(hWnd);
+				mouse.OnMouseEnter();
 			}
+		
+		}
 			// if we aren't in the client window
 			else
 			{
@@ -225,7 +223,7 @@ LRESULT ShadowWindow::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPara
 					mouse.OnMouseLeave();
 				}
 			}
-		}
+		
 		return 0;
 	}
 	case WM_LBUTTONDOWN:
