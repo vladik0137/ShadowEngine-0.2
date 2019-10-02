@@ -186,27 +186,32 @@ LRESULT ShadowWindow::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPara
 		float mX;
 		float mY;
 
-		if (mouse.LeftIsPressed() == true && pt.x >= 0 && pt.x < mwidth && pt.y >= 0 && pt.y < mheight)
+		if ( pt.x >= 0 && pt.x < mwidth && pt.y >= 0 && pt.y < mheight)
 		{
 			//log enter and capture mouse movements
 			mouse.OnMouseMove(pt.x, pt.y);
+
 			mX = mouse.GetPosX();
 			mY = mouse.GetPosY();
+			if (mouse.LeftIsPressed() == true)
+			{
+				float dx = DirectX::XMConvertToRadians(0.25F * static_cast<float>(mX - mouse.mLastMousePos.x));
+				float dy = DirectX::XMConvertToRadians(0.25F * static_cast<float>(mY - mouse.mLastMousePos.y));
 
-			float dx = DirectX::XMConvertToRadians(0.001F * static_cast<float>(mX - mouse.mLastMousePos.x));
-			float dy = DirectX::XMConvertToRadians(0.001F * static_cast<float>(mY - mouse.mLastMousePos.y));
+				pGraphics->mTheta += dx;
+				pGraphics->mPhi += dy;
 
-			pGraphics->mTheta += dx;
-			pGraphics->mPhi += dy;
-
-			pGraphics->mPhi = ShadowMath::Clamp(pGraphics->mPhi, 0.1f, ShadowMath::Pi - 0.1f);
+				pGraphics->mPhi = ShadowMath::Clamp(pGraphics->mPhi, 0.1f, ShadowMath::Pi - 0.1f);
+			}
 			
 			if (!mouse.IsInWindow())
 			{
 				SetCapture(hWnd);
 				mouse.OnMouseEnter();
 			}
-		
+			
+			mouse.mLastMousePos.x = mX;
+			mouse.mLastMousePos.y = mY;
 		}
 			// if we aren't in the client window
 			else
