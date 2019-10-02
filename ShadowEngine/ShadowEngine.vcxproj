@@ -136,6 +136,7 @@
     <ClCompile Include="Keyboard.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Mouse.cpp" />
+    <ClCompile Include="SceneController.cpp" />
     <ClCompile Include="ShadowException.cpp" />
     <ClCompile Include="ShadowMath.cpp" />
     <ClCompile Include="ShadowWindow.cpp" />
@@ -147,6 +148,7 @@
     <ClInclude Include="GameTimer.h" />
     <ClInclude Include="Keyboard.h" />
     <ClInclude Include="Mouse.h" />
+    <ClInclude Include="SceneController.h" />
     <ClInclude Include="ShadowException.h" />
     <ClInclude Include="ShadowMath.h" />
     <ClInclude Include="ShadowWin.h" />

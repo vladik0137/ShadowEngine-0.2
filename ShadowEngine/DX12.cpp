@@ -10,7 +10,10 @@ using Microsoft::WRL::ComPtr;
 using namespace std;
 using namespace DirectX;
 
+
 DX12::DX12(HWND hWnd)
+	:
+	mouse(mouse)
 {
 	DX12::InitDirect3D(hWnd);
 }
@@ -445,9 +448,9 @@ void DX12::OnResize()
 void DX12::Update()
 {
 	//Convert Spherical to Cartesian coordinates
-	float x = mRadius * sinf(mPhi) * cosf(mTheta);
-	float z = mRadius * sinf(mPhi) * sinf(mTheta);
-	float y = mRadius * cosf(mPhi);
+	float x = mouse.mRadius * sinf(mouse.mPhi) * cosf(mouse.mTheta);
+	float z = mouse.mRadius * sinf(mouse.mPhi) * sinf(mouse.mTheta);
+	float y = mouse.mRadius * cosf(mouse.mPhi);
 
 	// Build view matrix
 	XMVECTOR pos = XMVectorSet(x, y, z, 1.0f);

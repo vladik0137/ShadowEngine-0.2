@@ -1,4 +1,5 @@
 #pragma once
+#include "SceneController.h"
 
 #include <queue>
 
@@ -76,20 +77,29 @@ public:
 	};
 public:
 	Mouse() = default;
-	Mouse(const Mouse&) = delete;
-	Mouse& operator=(const Mouse&) = delete;
+	Mouse(const Mouse&) = default;
+	Mouse& operator=(const Mouse&) = default;
 	std::pair<int, int> GetPos() const noexcept;
+
 	int GetPosX() const noexcept;
 	int GetPosY() const noexcept;
+
+	float mTheta = 1.5f * DirectX::XM_PI;
+	float mPhi = DirectX::XM_PIDIV4;
+	float mRadius = 5.0f;
+
 	bool IsInWindow() const noexcept;
 	bool LeftIsPressed() const noexcept;
 	bool RightIsPressed() const noexcept;
+
 	Mouse::Event Read() noexcept;
+
 	bool IsEmpty() const noexcept
 	{
 		return buffer.empty();
 	}
 	void Flush() noexcept;
+
 private:
 	void OnMouseMove(int x, int y) noexcept;
 	void OnMouseLeave() noexcept;
@@ -110,5 +120,9 @@ private:
 	bool rightIsPressed = false;
 	bool isInWindow = false;
 	int wheelDeltaCarry = 0;
+
+
+
 	std::queue<Event> buffer;
+	POINT mLastMousePos;
 };

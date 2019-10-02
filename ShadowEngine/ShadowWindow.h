@@ -81,8 +81,6 @@ public:
 	int mwidth;
 	int mheight;
 private:
-
-
 	bool mAppPaused = false;
 	bool mMinimized = false;
 	bool mMaximized = false;

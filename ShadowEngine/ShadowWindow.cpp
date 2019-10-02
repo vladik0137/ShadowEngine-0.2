@@ -180,8 +180,10 @@ LRESULT ShadowWindow::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPara
 	case WM_MOUSEMOVE:
 	{
 		const POINTS pt = MAKEPOINTS(lParam);
+		// check to see if we are in client region
 		if (pt.x >= 0 && pt.x < mwidth && pt.y >= 0 && pt.y < mheight)
 		{
+			//log enter and capture mouse movements
 			mouse.OnMouseMove(pt.x, pt.y);
 			if (!mouse.IsInWindow())
 			{
@@ -189,12 +191,15 @@ LRESULT ShadowWindow::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPara
 				mouse.OnMouseEnter();
 			}
 		}
+		// if we aren't in the client window
 		else
 		{
+			// if the mouse button is still held down keep capturing
 			if (wParam & (MK_LBUTTON | MK_RBUTTON))
 			{
 				mouse.OnMouseMove(pt.x, pt.y);
 			}
+			// Release on mouse up
 			else
 			{
 				ReleaseCapture();

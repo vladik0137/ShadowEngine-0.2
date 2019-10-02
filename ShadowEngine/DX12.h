@@ -15,6 +15,7 @@
 #include "GameTimer.h"
 #include "ShadowMath.h"
 #include "UploadBuffer.h"
+#include "Mouse.h"
 
 struct Vertex
 {
@@ -130,9 +131,6 @@ private:
 	DirectX::XMFLOAT4X4 mView  = ShadowMath::Identity4x4();
 	DirectX::XMFLOAT4X4 mProj  = ShadowMath::Identity4x4();
 
-	float mTheta = 1.5f * DirectX::XM_PI;
-	float mPhi = DirectX::XM_PIDIV4;
-	float mRadius = 5.0f;
-
+	Mouse& mouse;
 };
 
