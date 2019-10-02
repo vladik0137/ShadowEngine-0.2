@@ -47,6 +47,10 @@ public:
 	bool Get4xMsaaState()const;
 	void Set4xMsaaState(bool value, HWND hwnd);
 
+	float mTheta = 1.5f * DirectX::XM_PI;
+	float mPhi = DirectX::XM_PIDIV4;
+	float mRadius = 5.0f;
+
 	int mClientWidth = 800;
 	int mClientHeight = 600;
 

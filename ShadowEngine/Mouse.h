@@ -76,17 +76,13 @@ public:
 		}
 	};
 public:
-	Mouse() = default;
+	Mouse();
 	Mouse(const Mouse&) = default;
 	Mouse& operator=(const Mouse&) = default;
 	std::pair<int, int> GetPos() const noexcept;
 
 	int GetPosX() const noexcept;
 	int GetPosY() const noexcept;
-
-	float mTheta = 1.5f * DirectX::XM_PI;
-	float mPhi = DirectX::XM_PIDIV4;
-	float mRadius = 5.0f;
 
 	bool IsInWindow() const noexcept;
 	bool LeftIsPressed() const noexcept;

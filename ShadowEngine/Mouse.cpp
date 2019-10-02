@@ -1,8 +1,12 @@
 #include "Mouse.h"
-#include "ShadowMath.h"
 
 #include <Windows.h>
 
+class DX12;
+
+Mouse::Mouse()
+{
+}
 
 std::pair<int, int> Mouse::GetPos() const noexcept
 {
@@ -57,17 +61,6 @@ void Mouse::OnMouseMove(int newx, int newy) noexcept
 {
 	x = newx;
 	y = newy;
-
-	if (leftIsPressed == true)
-	{
-		float dx = DirectX::XMConvertToRadians(0.25F * static_cast<float>(x - mLastMousePos.x));
-		float dy = DirectX::XMConvertToRadians(0.25F * static_cast<float>(y - mLastMousePos.y));
-
-		mTheta += dx;
-		mPhi += dy;
-
-		mPhi = ShadowMath::Clamp(mPhi, 0.1f, ShadowMath::Pi - 0.1f);
-	}
 
 	buffer.push(Mouse::Event(Mouse::Event::Type::Move, *this));
 	TrimBuffer();

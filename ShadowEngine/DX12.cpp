@@ -300,7 +300,7 @@ void DX12::BuildGeometry()
 		mCommandList.Get(), indices.data(), ibByteSize, mBoxGeo->IndexBufferUploader);
 
 	mBoxGeo->VertexByteStride = sizeof(Vertex);
-	mBoxGeo->IndexBufferByteSize = vbByteSize;
+	mBoxGeo->VertexBufferByteSize = vbByteSize;
 	mBoxGeo->IndexFormat = DXGI_FORMAT_R16_UINT;
 	mBoxGeo->IndexBufferByteSize = ibByteSize;
 
@@ -448,9 +448,9 @@ void DX12::OnResize()
 void DX12::Update()
 {
 	//Convert Spherical to Cartesian coordinates
-	float x = mouse.mRadius * sinf(mouse.mPhi) * cosf(mouse.mTheta);
-	float z = mouse.mRadius * sinf(mouse.mPhi) * sinf(mouse.mTheta);
-	float y = mouse.mRadius * cosf(mouse.mPhi);
+	float x = mRadius * sinf(mPhi) * cosf(mTheta);
+	float z = mRadius * sinf(mPhi) * sinf(mTheta);
+	float y = mRadius * cosf(mPhi);
 
 	// Build view matrix
 	XMVECTOR pos = XMVectorSet(x, y, z, 1.0f);

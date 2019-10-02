@@ -1,4 +1,5 @@
 #include "ShadowWindow.h"
+#include "ShadowMath.h"
 
 
 #include <sstream>
@@ -181,29 +182,48 @@ LRESULT ShadowWindow::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPara
 	{
 		const POINTS pt = MAKEPOINTS(lParam);
 		// check to see if we are in client region
-		if (pt.x >= 0 && pt.x < mwidth && pt.y >= 0 && pt.y < mheight)
+		if (mouse.LeftIsPressed() == true)
 		{
-			//log enter and capture mouse movements
-			mouse.OnMouseMove(pt.x, pt.y);
-			if (!mouse.IsInWindow())
+			if (pt.x >= 0 && pt.x < mwidth && pt.y >= 0 && pt.y < mheight)
 			{
-				SetCapture(hWnd);
-				mouse.OnMouseEnter();
-			}
-		}
-		// if we aren't in the client window
-		else
-		{
-			// if the mouse button is still held down keep capturing
-			if (wParam & (MK_LBUTTON | MK_RBUTTON))
-			{
+
+				int mX;
+				int mY;
+
+				//log enter and capture mouse movements
 				mouse.OnMouseMove(pt.x, pt.y);
+
+				mX = mouse.GetPosX();
+				mY = mouse.GetPosY();
+
+				float dx = DirectX::XMConvertToRadians(0.25F * static_cast<float>(mX - mouse.mLastMousePos.x));
+				float dy = DirectX::XMConvertToRadians(0.25F * static_cast<float>(mY - mouse.mLastMousePos.y));
+
+				pGraphics->mTheta += dx;
+				pGraphics->mPhi += dy;
+
+				pGraphics->mPhi = ShadowMath::Clamp(pGraphics->mPhi, 0.1f, ShadowMath::Pi - 0.1f);
+
+				if (!mouse.IsInWindow())
+				{
+					SetCapture(hWnd);
+					mouse.OnMouseEnter();
+				}
 			}
-			// Release on mouse up
+			// if we aren't in the client window
 			else
 			{
-				ReleaseCapture();
-				mouse.OnMouseLeave();
+				// if the mouse button is still held down keep capturing
+				if (wParam & (MK_LBUTTON | MK_RBUTTON))
+				{
+					mouse.OnMouseMove(pt.x, pt.y);
+				}
+				// Release on mouse up
+				else
+				{
+					ReleaseCapture();
+					mouse.OnMouseLeave();
+				}
 			}
 		}
 		return 0;
