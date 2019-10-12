@@ -29,6 +29,7 @@ int CALLBACK WinMain(
 
 	catch (...)
 	{
+		// Throw all other unknown exceptions
 		MessageBox(nullptr, L"No details availavle", L"Unkown Exception", MB_OK | MB_ICONEXCLAMATION);
 	}
 	return -1;

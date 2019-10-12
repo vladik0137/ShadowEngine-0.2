@@ -11,5 +11,4 @@ public:
 	int Run();
 private:
 	ShadowWindow wnd;
-	//GameTimer timer;
 };

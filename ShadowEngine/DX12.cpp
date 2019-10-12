@@ -179,7 +179,7 @@ void DX12::BuildConstantBuffers()
 
 	D3D12_GPU_VIRTUAL_ADDRESS cbAddress = mObjectCB->Resource()->GetGPUVirtualAddress();
 
-	int boxCBufIndex = 0;
+	UINT boxCBufIndex = 0;
 	cbAddress += boxCBufIndex * objCBByteSize;
 
 	D3D12_CONSTANT_BUFFER_VIEW_DESC cbvDesc;
@@ -554,6 +554,8 @@ void DX12::CreateSwapChain(HWND hWnd)
 {
 	mSwapChain.Reset();
 
+	bool iWindow = AppWindowActive;
+
 	DXGI_SWAP_CHAIN_DESC sd;
 	sd.BufferDesc.Width = mClientWidth;
 	sd.BufferDesc.Height = mClientHeight;
@@ -567,7 +569,7 @@ void DX12::CreateSwapChain(HWND hWnd)
 	sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 	sd.BufferCount = SwapChainBufferCount;
 	sd.OutputWindow = hWnd;
-	sd.Windowed = true;
+	sd.Windowed = iWindow;
 	sd.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;
 	sd.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
 
@@ -591,8 +593,11 @@ void DX12::FlushCommandQueue()
 
 		ThrowIfFailed(mFence->SetEventOnCompletion(mCurrentFence, eventHandle));
 
-		WaitForSingleObject(eventHandle, INFINITE);
-		CloseHandle(eventHandle);
+		if (eventHandle > 0)
+		{
+			WaitForSingleObject(eventHandle, INFINITE);
+			CloseHandle(eventHandle);
+		}
 	}
 }
 

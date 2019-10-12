@@ -44,6 +44,8 @@ public:
 public:
 	float AspectRatio()const;
 
+	bool AppWindowActive = true;
+
 	bool Get4xMsaaState()const;
 	void Set4xMsaaState(bool value, HWND hwnd);
 
